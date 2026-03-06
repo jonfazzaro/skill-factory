@@ -30,6 +30,7 @@ Lens order:
 - 09-file-boundaries
 - 10-structural-storytelling
 - 11-semantic-clarity
+- 14-coupling
 - 12-outside-box
 - 13-final-review
 
