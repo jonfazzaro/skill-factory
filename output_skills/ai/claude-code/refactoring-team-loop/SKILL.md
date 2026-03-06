@@ -7,10 +7,14 @@ hooks:
   TeammateIdle:
     - hooks:
         - type: command
-          command: "${CLAUDE_SKILL_DIR}/references/guard-idle-worker.sh"
+          command: "${CLAUDE_SKILL_DIR}/../refactoring-team/references/guard-idle-worker.sh"
 ---
 
 STARTER_CHARACTER = 💎
+
+This skill wraps `refactoring-team` with a quality-check loop. All lenses, prompts, and reviewer guides live in the `refactoring-team` skill — this skill only adds the evaluator and loop logic.
+
+REFACTORING_TEAM_DIR = `${CLAUDE_SKILL_DIR}/../refactoring-team`
 
 ## Prerequisites
 
@@ -40,17 +44,21 @@ Use it to name the teammates:
 - Worker: `worker-ID` (e.g. `worker-a3f`)
 - Reviewer: `reviewer-ID` (e.g. `reviewer-a3f`)
 
-Read the spawn prompts:
-- Worker: [references/worker-prompt.md](references/worker-prompt.md)
-- Reviewer: [references/reviewer-prompt.md](references/reviewer-prompt.md)
+Read the spawn prompts from refactoring-team:
+- Worker: `REFACTORING_TEAM_DIR/references/worker-prompt.md`
+- Reviewer: `REFACTORING_TEAM_DIR/references/reviewer-prompt.md`
 
 Before spawning, replace these placeholders in both prompts:
 - `TARGET_PATH` -> actual target path
 - `TEST_COMMAND` -> actual test command
-- `LENSES_DIR` -> `${CLAUDE_SKILL_DIR}/references/lenses`
-- `GUIDES_DIR` -> `${CLAUDE_SKILL_DIR}/references/reviewer-guides`
+- `LENSES_DIR` -> `REFACTORING_TEAM_DIR/references/lenses`
+- `GUIDES_DIR` -> `REFACTORING_TEAM_DIR/references/reviewer-guides`
 - `WORKER_NAME` -> the worker's name (e.g. `worker-a3f`)
 - `REVIEWER_NAME` -> the reviewer's name (e.g. `reviewer-a3f`)
+
+Append this to the reviewer prompt before spawning:
+
+> **Loop override**: At wrap-up, say "Round complete" (not "Refactoring complete"). After writing REFACTORING-LOG.md, go idle. The manager will decide whether another round is needed.
 
 Spawn both teammates.
 
@@ -66,14 +74,14 @@ When both teammates go idle, check that `REFACTORING-LOG.md` exists. This signal
 
 Spawn a quality checker to assess the result:
 
-1. Generate a new ID: `head -c 3 /dev/urandom | xxd -p | head -c 3`
-2. Name it `checker-ID` (e.g. `checker-c9d`)
-3. Read [references/quality-checker-prompt.md](references/quality-checker-prompt.md)
-4. Replace placeholders:
-   - `TARGET_PATH` -> actual target path
-   - `LENSES_DIR` -> `${CLAUDE_SKILL_DIR}/references/lenses`
-   - `CHECKER_NAME` -> the checker's name
-5. Spawn the quality checker
+- Generate a new ID: `head -c 3 /dev/urandom | xxd -p | head -c 3`
+- Name it `checker-ID` (e.g. `checker-c9d`)
+- Read [references/quality-checker-prompt.md](references/quality-checker-prompt.md)
+- Replace placeholders:
+  - `TARGET_PATH` -> actual target path
+  - `LENSES_DIR` -> `REFACTORING_TEAM_DIR/references/lenses`
+  - `CHECKER_NAME` -> the checker's name
+- Spawn the quality checker
 
 When the checker goes idle, read `.refactoring-remaining-issues.md`.
 
@@ -83,12 +91,12 @@ If the "Worth Fixing" section in `.refactoring-remaining-issues.md` has meaningf
 
 ## Launch Round 2
 
-1. Generate new IDs for worker and reviewer
-2. Read the spawn prompts again (worker-prompt.md and reviewer-prompt.md)
-3. Replace all placeholders as in Round 1
-4. Read `.refactoring-remaining-issues.md` and prepend its "Worth Fixing" items to the worker prompt under a `## Priority Issues` header — these are what the worker should focus on first
-5. Spawn both teammates
-6. When both go idle and a new `REFACTORING-LOG.md` is written, refactoring is complete
+- Generate new IDs for worker and reviewer
+- Read the spawn prompts again from `REFACTORING_TEAM_DIR/references/`
+- Replace all placeholders as in Round 1 (including the loop override for the reviewer)
+- Read `.refactoring-remaining-issues.md` and prepend its "Worth Fixing" items to the worker prompt under a `## Priority Issues` header — these are what the worker should focus on first
+- Spawn both teammates
+- When both go idle and a new `REFACTORING-LOG.md` is written, refactoring is complete
 
 Run `speak "Refactoring complete"` and tell the user.
 
