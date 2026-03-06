@@ -31,10 +31,19 @@ Lens order:
 - 10-structural-storytelling
 - 11-semantic-clarity
 - 14-conditionals
-- 15-coupling
-- 16-wrong-abstraction
-- 12-outside-box
-- 13-final-review
+- 15-magic-values
+- 16-comments
+- 17-cohesion
+- 18-responsibility
+- 19-coupling
+- 20-object-type-design
+- 21-api-interface
+- 22-mutable-state
+- 23-error-handling
+- 24-wrong-abstraction
+- 25-emergent-design
+- 26-outside-box
+- 27-final-review
 
 ## State Tracking
 
