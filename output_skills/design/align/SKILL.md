@@ -12,53 +12,54 @@ Synchronize the mental model between you and the user before implementation begi
 
 ## Core Principle
 
-Propose, don't ask. Think first, then present your full thinking upfront. The user's job is to spot divergence and course-correct, not to generate the approach.
+Propose, don't ask. Think first, then present your thinking for confirmation. The user's job is to spot divergence and course-correct, not to generate the approach.
 
-## Flow
+## Flow — Zoom In
+
+Each level deepens understanding. Confirm before going deeper.
 
 ```
-Read input → Think fully → Present overview → User flags items → Drill into flagged
+Goal → Big Picture → Straightforward Details → Non-obvious Decisions (one by one)
 ```
 
-- Read the input context
-- Think through the full approach internally
-- Present a concise overview of the entire proposed approach with your default recommendation for each item
-- Ask the user which items they want to discuss — everything else is accepted as-is
-- Drill into only the flagged items
+### 1. Goal
 
-## The Overview
+State what you understand the goal to be and why it matters. A sentence or two. This catches the deepest misalignment — if you're solving the wrong problem, nothing else matters.
 
-The overview is the core of this skill. It's a scannable summary of every decision and step, each with your default recommendation. Present it in two tiers:
+Confirm with AskUserQuestion before going deeper.
 
-**Straightforward items first** — decisions where there's really only one reasonable approach. Present these as a quick batch. The user confirms or skips with minimal friction.
+### 2. Big Picture
 
-**Non-obvious items second** — decisions with real tradeoffs, multiple valid approaches, or where your recommendation might surprise the user. Present these in a separate block to signal "these deserve your attention."
+Present the overall shape of the approach: how do the pieces relate, what's the high-level flow. ASCII diagram. A few sentences, not a page.
 
-Each item in both tiers:
-- Briefly states the problem or decision (what is being decided and - only when non-obvious - why it matters)
-- ⭐ Your default recommendation with brief rationale
-- One line, maybe two — not a full analysis
+Confirm with AskUserQuestion before going deeper.
 
-Include an ASCII diagram of the overall structure or flow when it helps comprehension.
+### 3. Straightforward Details
 
-After presenting both tiers, ask the user which items (if any) they want to discuss. Use AskUserQuestion with multiple choice.
+Decisions where there's really only one reasonable approach. Present as a quick batch list — no ⭐/❌ needed since there are no real alternatives. The user confirms or flags exceptions.
 
-## Drilling In
+Each item: one line stating the decision. Save the "why" — it's obvious.
 
-For each flagged item, expand with:
-- ⭐ Recommended approach with fuller rationale
+### 4. Non-obvious Decisions
+
+Decisions with real tradeoffs, multiple valid approaches, or where your recommendation might surprise the user.
+
+First, present a brief index of what's coming — just the problem titles, no recommendations. This lets the user see the scope.
+
+Then walk through each one (or small related groups) with:
+- The problem: what is being decided, why it matters
+- ⭐ Recommended approach with rationale
 - ❌ Alternatives considered with why they were rejected
 - ASCII diagram if the item involves structure or flow
 
-Confirm the item with AskUserQuestion before moving to the next flagged item.
+Confirm each with AskUserQuestion before moving to the next.
 
-When the user rejects a recommendation, check whether downstream items in the overview are affected. If so, flag which ones need revisiting.
+When the user rejects a recommendation, check whether downstream items are affected. If so, flag which ones need revisiting.
 
 ## Anti-patterns
 
-- Jumping to recommendations without stating the problem (user needs to understand WHAT before HOW)
-- Forcing the user through N confirmation rounds when most items are fine (overview-then-flag avoids this)
-- Presenting the full detailed analysis for every item upfront (save depth for flagged items only)
+- Jumping to detail-level decisions before establishing the big picture
+- Presenting the full detailed analysis for every item (save depth for non-obvious items only)
 - Asking open-ended questions instead of proposing (the user invoked this to see YOUR thinking)
 - Skipping ASCII diagrams for structural or flow topics
-- Continuing with pre-planned details after a redirect without reconsidering downstream impact
+- Continuing with pre-planned items after a redirect without reconsidering downstream impact
