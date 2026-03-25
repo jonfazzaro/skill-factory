@@ -28,16 +28,20 @@ Read input → Think fully → Present overview → User flags items → Drill i
 
 ## The Overview
 
-The overview is the core of this skill. It's a scannable summary of every decision and step, each with your default recommendation. The user should be able to read it in under a minute and say "looks good" or "let's talk about 2 and 5."
+The overview is the core of this skill. It's a scannable summary of every decision and step, each with your default recommendation. Present it in two tiers:
 
-Each item in the overview:
-- Briefly states the problem or decision (what is being decided and why it matters)
+**Straightforward items first** — decisions where there's really only one reasonable approach. Present these as a quick batch. The user confirms or skips with minimal friction.
+
+**Non-obvious items second** — decisions with real tradeoffs, multiple valid approaches, or where your recommendation might surprise the user. Present these in a separate block to signal "these deserve your attention."
+
+Each item in both tiers:
+- Briefly states the problem or decision (what is being decided and - only when non-obvious - why it matters)
 - ⭐ Your default recommendation with brief rationale
 - One line, maybe two — not a full analysis
 
 Include an ASCII diagram of the overall structure or flow when it helps comprehension.
 
-After presenting the overview, ask the user which items (if any) they want to discuss. Use AskUserQuestion.
+After presenting both tiers, ask the user which items (if any) they want to discuss. Use AskUserQuestion with multiple choice.
 
 ## Drilling In
 
