@@ -176,3 +176,17 @@ const service = MyService.create(MyRepository.createNull(), MyHttpClient.createN
 // ALSO GOOD: a higher-level class's tests use MyService.createNull()
 const handler = Handler.create(MyService.createNull());
 ```
+
+**Asynchronous create** — `create()` and constructors must be synchronous. Any async initialization (config lookups, network calls) must happen in the caller *before* `create()` is invoked.
+
+```javascript
+// BAD: async work inside create()
+static async create() {
+  const config = await loadConfig();  // ❌
+  return new MyService(new MyRepository(config));
+}
+
+// GOOD: caller resolves async deps, passes them in
+const config = await loadConfig();
+const service = MyService.create(new MyRepository(config));
+```
