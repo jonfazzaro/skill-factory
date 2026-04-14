@@ -38,8 +38,8 @@ Nullables are production code with an "off switch" for infrastructure—not test
 
 ## The Foundation: A-Frame Architecture
 
-A-Frame is the architectural insight that makes Nullables work especially well. 
-Traditional layered architecture stacks Logic on top of Infrastructure, making Logic depend on slow, brittle I/O. 
+A-Frame is the architectural insight that makes Nullables work especially well.
+Traditional layered architecture stacks Logic on top of Infrastructure, making Logic depend on slow, brittle I/O.
 A-Frame makes them **peers** instead:
 
 ```
@@ -151,9 +151,11 @@ These patterns work together:
 **Constructor connects to infrastructure** — Constructors should perform no work. Defer connections to explicit methods. See [Zero-Impact Instantiation](references/building/infrastructure-wrappers.md#zero-impact-instantiation).
 
 **Parameters at wrong abstraction level** — `createNull()` should accept domain concepts, not implementation details:
+
 ```javascript
 // BAD: Leaking HTTP details
 LoginClient.createNull({ httpResponse: { status: 200, body: '{"email":"x"}' } });
+
 // GOOD: Domain level
 LoginClient.createNull({ email: "user@example.com", verified: true });
 ```
@@ -161,3 +163,16 @@ LoginClient.createNull({ email: "user@example.com", verified: true });
 **Stubs in test files** — Stubs belong in production code alongside the wrapper. See [embedded-stubs.md](references/building/embedded-stubs.md).
 
 **Stub as complex as the real thing** — If your stub needs significant logic, reconsider the abstraction.
+
+**Testing the null** — Tests of a class must call `create()` on the class under test, not `createNull()`. `createNull()` exists for the benefit of *other* classes' tests — a service's tests would use `Dependency.createNull()` so they don't have to wire up real infrastructure. But a class's own tests should call `create()` with null deps injected, so its real code runs.
+
+```javascript
+// BAD: MyService's own tests calling createNull() on itself
+const service = MyService.createNull();  // skips real create() logic
+
+// GOOD: MyService's own tests call create() with nulled deps
+const service = MyService.create(MyRepository.createNull(), MyHttpClient.createNull());
+
+// ALSO GOOD: a higher-level class's tests use MyService.createNull()
+const handler = Handler.create(MyService.createNull());
+```
