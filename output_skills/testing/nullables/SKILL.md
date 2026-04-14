@@ -183,10 +183,10 @@ const handler = Handler.create(MyService.createNull());
 // BAD: async work inside create()
 static async create() {
   const config = await loadConfig();  // ❌
-  return new MyService(new MyRepository(config));
+  return new MyService(config);
 }
 
 // GOOD: caller resolves async deps, passes them in
 const config = await loadConfig();
-const service = MyService.create(new MyRepository(config));
+const service = MyService.create(config);
 ```
